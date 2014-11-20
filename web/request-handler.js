@@ -22,38 +22,17 @@ exports.handleRequest = function(req, res) {
         }
       });
     }
-
   } else if (req.method === 'POST') {
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!' + pathurl);
     res.writeHead(302, httpHelpers.headers);
-
     var buffer = [];
     req.on('data', function(chunk) {
       buffer += chunk;
     });
-
     req.on('end', function() {
-      var newCleanUrl = buffer.toString().slice(4);
-      //console.log(newCleanUrl);
-
-      archive.isUrlInList(newCleanUrl, function(urlExists) {
-        if (urlExists) {
-          archive.isURLArchived(newCleanUrl, function(isArchived) {
-            if (isArchived) {
-              httpHelpers.serveArchives(res, newCleanUrl, 200);
-            } else {
-              httpHelpers.serveAssets(res, 'loading.html', 200);
-            }
-          });
-        } else {
-          fs.appendFile(archive.paths['list'], newCleanUrl + '\n', function(err) {
-            if (err) throw err;
-            console.log('The "data to append" was appended to file!');
-            //res.writeHead(200, httpHelpers.headers);
-            http.serveAssets(res, 'loading.html', 200);
-          });
-          //append to archive list
-        }
+      var newCleanUrl = buffer.toString().slice(4)
+      fs.writeFile(archive.paths.list, newCleanUrl + '\n', function(err) {
+        if (err) throw err;
+        res.end(archive.paths.list);
       });
     });
   }
