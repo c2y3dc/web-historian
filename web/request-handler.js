@@ -12,8 +12,21 @@ exports.handleRequest = function (req, res){
     //is there a request or is it === to '/' {
     if(pathurl === '/'){
       res.writeHead(200, httpHelpers.headers);
-      //serverAssets index.html                                                                                                                                                                                                                                                                                                                                                                                                                                index.html
-    } else if(archive.isURLArchived()) {
+      //serverAssets index.html
+      httpHelpers.serveAssets(res, 'index.html', function(data){
+        res.end(data.toString());
+      });
+    } else if(archive.isURLArchived(noSlashUrl, function(isURL){
+      if(isURL){
+        res.writeHead(200, httpHelpers.headers);
+        httpHelpers.serveArchives(res, noSlashUrl, function(data){
+          res.end(data.toString());
+        });
+      } else {
+        res.writeHead(404, httpHelpers.headers);
+        res.end('');
+      }
+    })){
 
     }
     // else
