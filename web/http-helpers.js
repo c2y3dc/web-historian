@@ -20,6 +20,7 @@ exports.serveAssets = function(res, asset, status) {
 
 exports.serveArchives = function(res, url, status) {
   fs.readFile(archive.paths['archivedSites'] + '/' + url, function(err, data) {
+
     if (err) throw err;
     res.writeHead(status, headers);
     res.end(data.toString());
