@@ -12,20 +12,13 @@ exports.handleRequest = function(req, res) {
   if (req.method === 'GET') {
     //is there a request or is it === to '/' {
     if (pathurl === '/') {
-      res.writeHead(200, httpHelpers.headers);
-      httpHelpers.serveAssets(res, 'index.html', function(data) {
-        res.end(data.toString());
-      });
+      httpHelpers.serveAssets(res, 'index.html', 200);
     } else {
       archive.isURLArchived(noSlashUrl, function(isURL) {
         if (isURL) {
           //console.log("pathurl", pathurl);
           //console.log("noSlashURL", noSlashUrl);
-          res.writeHead(200, httpHelpers.headers);
-          httpHelpers.serveArchives(res, noSlashUrl, function(data) {
-            console.log("data in serveArch", data);
-            res.end(data.toString());
-          });
+          httpHelpers.serveArchives(res, noSlashUrl, 200)
         } else {
           res.writeHead(404, httpHelpers.headers);
           res.end('');
