@@ -23,7 +23,7 @@ exports.serveArchives = function(res, url, status) {
     if (err) throw err;
     res.writeHead(status, headers);
     res.end(data.toString());
-  });
+  }); 
 };
 
 
